@@ -10,7 +10,7 @@ export default async function Home() {
     <div className={styles.root}>
       <div className={styles.content}>
         <div>
-          <h1 className={styles.title}>{campaign.title}</h1>
+          <h1 className={styles.title}>{(campaign as any).title}</h1>
           <h2 className={styles.subtitle}>
             Con tu donación me ayudás a acercarme mi objetivo.
           </h2>

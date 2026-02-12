@@ -1,5 +1,8 @@
-// Step 1: Import the parts of the module you want to use
 import { MercadoPagoConfig, Payment, Preference } from "mercadopago";
+
+if (!process.env.MP_TOKEN) { 
+  throw new Error("MP_TOKEN is not defined in .env");
+}
 
 // Step 2: Initialize the client object
 const client = new MercadoPagoConfig({
@@ -7,7 +10,7 @@ const client = new MercadoPagoConfig({
   options: { timeout: 5000, idempotencyKey: "abc" },
 });
 
-const BASE_URL = process.env.VERCEL_URL || "apx.school";
+const BASE_URL = process.env.VERCEL_URL || "localhost:4004";
 
 // Step 3: Initialize the API object
 const pref = new Preference(client);
@@ -39,7 +42,7 @@ export async function createSingleProductPreference(
           title: options.productName,
           description: options.productDescription,
           quantity: 1,
-          currency_id: "ARS",
+          currency_id: "UYU",
           unit_price: options.productPrice,
         },
       ],
