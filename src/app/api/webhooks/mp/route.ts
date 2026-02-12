@@ -8,9 +8,9 @@ export async function POST(request: Request, { params }) {
   if (body.type === "payment") {
     const mpPayment = await getPaymentById(body.data.id);
     if (mpPayment.status === "approved") {
-      console.log(`Payment ${mpPayment.id} approved`);
+      console.log(`\n\n Payment approved \n\n`, mpPayment);
       const purchaseId = mpPayment.external_reference;
-
+      console.log(`Aca esta el purchaseId: ${purchaseId}\n\n Y el tipo del purchaseId: ${typeof(purchaseId)}`)
       await confirmPurchase(purchaseId);
     }
   }

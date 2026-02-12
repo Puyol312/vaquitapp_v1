@@ -8,7 +8,7 @@ export default async function Home() {
   const confirmed = await getConfirmedPayments();
   const totalDonations = confirmed.reduce((a, b) => a + b.amount, 0);
   const campaign = await getCampaign();
-  const donationsGoal = campaign.amount;
+  const donationsGoal = (campaign as any).amount;
   const progressPercent = Math.round((totalDonations / donationsGoal) * 100);
 
   return (
@@ -18,10 +18,10 @@ export default async function Home() {
         <div className={styles.goal}>
           <img
             className={styles.goalImg}
-            src="https://www.shutterstock.com/image-photo/new-playstation-5-slim-model-260nw-2377124501.jpg"
+            src="https://upload.wikimedia.org/wikipedia/commons/f/f4/Gaming_pc.jpg"
           />
           <div className={styles.goalTexts}>
-            <h2 className={styles.goalTitle}>{campaign.title}</h2>
+            <h2 className={styles.goalTitle}>{(campaign as any).title}</h2>
             <div className={styles.goalDonations}>
               <span className={styles.totalDonations}>${totalDonations.toLocaleString()}</span>{" "}/{" "}
               ${donationsGoal.toLocaleString()}
@@ -30,7 +30,7 @@ export default async function Home() {
               className={styles.goalProgressBar}
               style={{ "--progress": progressPercent } as any}
             ></div>
-            <p className={styles.goalDesc} dangerouslySetInnerHTML={{ __html: campaign.description.replace(/\n/g, "<br>") }} />
+            <p className={styles.goalDesc} dangerouslySetInnerHTML={{ __html: (campaign as any).description.replace(/\n/g, "<br>") }} />
           </div>
         </div>
         <div className={styles.donations}>
