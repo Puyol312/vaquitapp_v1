@@ -21,6 +21,5 @@ export async function donateAction(data: FormData) {
     productPrice: amount,
     transactionId: String(newPurchId),
   });
-  console.log(newPref);
   redirect(newPref.init_point);
 }
