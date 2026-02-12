@@ -1,55 +1,54 @@
-type Purchase = {
-  id: string;
+import { Purchase } from "./models/purchase";
+
+type PurchaseOptions = {
+  id: number;
   from: string;
   amount: number;
   message: string;
   date: Date;
   status: string;
 };
-export async function getConfirmedPayments(): Promise<Purchase[]> {
-  // Mock data
-  return [
-    {
-      id: "1",
-      from: "Pepito",
-      amount: 33000,
-      message: "Ahi te va mi aporte",
-      date: new Date(),
-      status: "confirmed",
+
+export async function getConfirmedPayments(): Promise<PurchaseOptions[]> {
+  const paidPurchases = await Purchase.findAll({
+    where: {
+      status: "paid",
     },
-    {
-      id: "2",
-      from: "Juanita",
-      amount: 54000,
-      message: "Apoyo esta campaña",
-      date: new Date(),
-      status: "confirmed",
-    },
-    {
-      id: "3",
-      from: "Pepita",
-      amount: 60000,
-      message: "Ojalá que llegues",
-      date: new Date(),
-      status: "confirmed",
-    },
-  ];
+  });
+  const results = paidPurchases.map(purchase => ({
+    id: purchase.get("id"),
+    from: String(purchase.get("from")),
+    amount: Number(purchase.get("amount")),
+    message: String(purchase.get("message")),
+    date: purchase.get("date") as Date,
+    status: String(purchase.get("status")),
+  }));
+  return results;
 }
 
 export async function createPurchase(
-  newPurchInput: Pick<Purchase, "from" | "amount" | "message">
-): Promise<string> {
-  const purchase = {
-    ...newPurchInput,
+  { from, amount, message }: { from: string; amount: number; message: string }
+): Promise<number> {
+  const newPurchase = await Purchase.create({
+    from,
+    amount,
+    message,
     date: new Date(),
-    status: "pending",
-  };
-  // guardamos esta nueva purchase en la db y devolvemos el id
-  return "1234";
+  });
+
+  return newPurchase.get("id");
 }
 
-export function confirmPurchase(purchaseId: string) {
-  // confirmamos la compra en la DB
-  console.log(`Purchase ${purchaseId} confirmed`);
-  return true;
+export async function confirmPurchase(purchaseId: string) {
+  const purchase = await Purchase.findByPk(Number(purchaseId));
+
+  if (!purchase) {
+    throw new Error("Purchase not found");
+  }
+
+  await purchase.update({
+    status: "paid",
+  });
+
+  return purchase;
 }

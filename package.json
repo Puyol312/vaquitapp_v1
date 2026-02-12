@@ -11,14 +11,21 @@
   "dependencies": {
     "mercadopago": "^2.1.0",
     "next": "15.1.2",
+    "pg": "^8.18.0",
+    "pg-hstore": "^2.3.4",
+    "pg-native": "^3.5.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "sass": "^1.83.0"
+    "sass": "^1.83.0",
+    "sequelize": "^6.37.7"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "16.1.6",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
