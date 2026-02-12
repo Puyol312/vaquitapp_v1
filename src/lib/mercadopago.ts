@@ -4,7 +4,6 @@ if (!process.env.MP_TOKEN) {
   throw new Error("MP_TOKEN is not defined in .env");
 }
 
-// Step 2: Initialize the client object
 const client = new MercadoPagoConfig({
   accessToken: process.env.MP_TOKEN as string,
   options: { timeout: 5000, idempotencyKey: "abc" },
@@ -12,7 +11,6 @@ const client = new MercadoPagoConfig({
 
 const BASE_URL = process.env.VERCEL_URL || "localhost:4004";
 
-// Step 3: Initialize the API object
 const pref = new Preference(client);
 
 type CreatePrefOptions = {
@@ -23,16 +21,9 @@ type CreatePrefOptions = {
   transactionId: string;
 };
 
-// recibimos data más generica en esta función
-// para abstraer al resto del sistema
-// de los detalles de mercado pago
-// esto nos permitirá hacer cambios dentro de esta librería
-// sin tener que modificar el resto del sistema
 export async function createSingleProductPreference(
   options: CreatePrefOptions
 ) {
-  // Todas las opciones en
-  // https://www.mercadopago.com.ar/developers/es/reference/preferences/_checkout_preferences/post
 
   return pref.create({
     body: {
@@ -46,14 +37,12 @@ export async function createSingleProductPreference(
           unit_price: options.productPrice,
         },
       ],
-      // URL de redirección en los distintos casos
       back_urls: {
         success: "https://" + BASE_URL + "/donate/success",
         failure: "https://" + BASE_URL + "/donate/failure",
         pending: "https://" + BASE_URL + "/donate/pending",
       },
-      // Esto puede ser el id o algún otro identificador
-      // que te ayude a vincular este pago con el producto más adelante
+
       external_reference: options.transactionId,
     },
   });
